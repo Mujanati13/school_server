@@ -1,19 +1,25 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mysql = require("mysql");
+const multer = require('multer');
 
 const app = express();
 const cors = require("cors");
+const upload = multer({ dest: 'uploads/' });
+const ffmpeg = require('fluent-ffmpeg');
+const fileupload = require("express-fileupload");
 
+app.use(express.static("files"));
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(fileupload());
 
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "simo1234",
   database: "Face",
+  password: "",
 });
 
 // Connect to the MySQL server
@@ -59,6 +65,20 @@ function isStudentOnTime(classTime, arrivalTime) {
 
 // Define a route that queries the database
 app.get("/", (req, res) => {});
+
+app.post("/upload", (req, res) => {
+  const newpath = __dirname + "/uploads/";
+  const file = req.files.file;
+  const filename = file.name;
+ 
+  file.mv(`${newpath}${filename}`, (err) => {
+    if (err) {
+      res.status(500).send({ message: "File upload failed", code: 200 });
+      console.log(err);
+    }
+    res.status(200).send({ message: "File Uploaded", code: 200 });
+  });
+});
 
 app.get("/api/absence", (req, res) => {
   const userId = req.query.userId;
