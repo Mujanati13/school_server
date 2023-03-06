@@ -19,7 +19,7 @@ const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
   database: "Face",
-  password: "",
+  password: "simo1234",
 });
 
 // Connect to the MySQL server
@@ -164,7 +164,7 @@ app.post("/api/newface", (req, res) => {
 
 console.log(new Date().getDate());
 // Start the server
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server listening on port ${port}.`);
 });
